@@ -49,7 +49,7 @@ def get_inverse(args, query, n_bins=100, log=False):
         return xnew, spline
 
 
-def get_periods(args, path_to_sample='../../Info/rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
+def get_periods(args, path_to_sample='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
     # read in known rotation periods to draw samples from
     df = pd.read_csv(args.path_to_sample)
     if args.path_to_stars is not None:
@@ -82,7 +82,7 @@ def get_periods(args, path_to_sample='../../Info/rotation.csv', min_sample=20, r
 
 
 # Main function to import when not using CLI
-def get_period(teff, logg, period=[], path='../../Info/rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
+def get_period(teff, logg, period=[], path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
     # read in known rotation periods and get limits
     df = pd.read_csv(path)
     for tt, ll in zip(teff, logg):
