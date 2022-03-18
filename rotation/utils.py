@@ -1,7 +1,7 @@
-#!/usr/local/bin/python
+import os
+import random
 import numpy as np
 import pandas as pd
-import os, random, argparse
 from scipy import stats, interpolate
 
 
