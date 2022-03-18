@@ -1,8 +1,8 @@
 import argparse
 
-import prot
-from prot import utils
-from prot import DATADIR
+import rotation
+from rotation import utils
+from rotation import DATADIR
 
 
 def main():
