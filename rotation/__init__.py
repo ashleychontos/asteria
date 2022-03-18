@@ -8,10 +8,10 @@ __version__ = '0.0.1'
 
 DATADIR = None
 
-if 'PROT' in os.environ:
-    DATADIR = os.environ['PROT']
+if 'ROTATION' in os.environ:
+    DATADIR = os.environ['ROTATION']
 else:
-    DATADIR = os.path.join(os.path.expanduser('~'), '.prot')
+    DATADIR = os.path.join(os.path.expanduser('~'), '.rotation')
 
 if not os.path.isdir(DATADIR):
     # If DATADIR doesn't exist, make a new directory to accommodate data
