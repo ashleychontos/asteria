@@ -14,18 +14,18 @@ for line in open('requirements.txt', 'r').readlines():
     reqs.append(line)
 
 setuptools.setup(
-    name="prot",
-    version=get_property('__version__', 'rotate'),
+    name="rotstar",
+    version=get_property('__version__', 'rotstar'),
     license="MIT",
     author="Ashley Chontos",
     author_email="achontos@hawaii.edu",
     description="A quick package for estimating stellar rotation periods given their teff and logg",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/ashleychontos/rotate",
+    url="https://github.com/ashleychontos/rotation",
     project_urls={
-        "Source": "https://github.com/ashleychontos/rotate",
-        "Bug Tracker": "https://github.com/ashleychontos/rotate/issues",
+        "Source": "https://github.com/ashleychontos/rotation",
+        "Bug Tracker": "https://github.com/ashleychontos/rotation/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -34,6 +34,6 @@ setuptools.setup(
     ],
     install_requires=reqs,
     packages=setuptools.find_packages(),
-    entry_points={'console_scripts':['rotate=rotate.cli:main']},
+    entry_points={'console_scripts':['rotate=rotstar.cli:main']},
     python_requires=">=3.6",
 )
