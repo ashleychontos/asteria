@@ -5,6 +5,7 @@ import argparse
 import matplotlib
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from scipy import stats, interpolate
 
 fig_path = '/Users/ashleychontos/Desktop/'
