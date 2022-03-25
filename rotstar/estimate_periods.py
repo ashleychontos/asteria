@@ -2,6 +2,7 @@
 import os
 import random
 import argparse
+import matplotlib
 import numpy as np
 import pandas as pd
 from scipy import stats, interpolate
