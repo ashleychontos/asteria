@@ -155,7 +155,7 @@ def save_file(x, y, path, formats=[">10.4f", ">10.2f"]):
 
 
 def ensemble_plot_teff(path='rotation.csv', path_save='distributions', min_sample=20, 
-                       res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=False):
+                       res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=True):
     import os
     from matplotlib import cm
     if not os.path.exists(os.path.join(os.path.abspath(os.getcwd()), path_save)):
@@ -437,6 +437,10 @@ def multiline(xs, ys, c, ax=None, **kwargs):
     ax.add_collection(lc)
     ax.autoscale()
     return lc
+
+ensemble_plot_teff()
+ensemble_plot_logg()
+ensemble_plot_double()
 
 
 
