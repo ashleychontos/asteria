@@ -5,23 +5,6 @@ import pandas as pd
 from scipy import stats, interpolate
 
 
-def main(args):
-    check_inputs(args)
-    get_periods(args)
-
-
-def check_inputs(args):
-    assert isinstance(args.path_to_sample,str) and os.path.exists(args.path_to_sample), "Cannot find the Kepler/K2 sample of rotation periods."
-    if args.path_to_stars is None and args.teff is None and args.logg is None:
-        assert False, "No sample file or arrays were provided. Please try again."
-    if args.path_to_stars is not None:
-        assert isinstance(args.path_to_stars,str) and os.path.exists(args.path_to_stars), "Cannot find the file to the star list."
-    if args.teff is not None and args.logg is not None:
-        assert len(args.teff) == len(args.logg), "The two arrays do not have matching lengths."
-    if (args.teff is not None and args.logg is None) or (args.teff is None and args.logg is not None):
-        assert False, "Only one array was provided but it needs both to run. Please try again."
-
-
 def fix_distribution(x, y):
     indices=[0]
     for i in range(1,len(y)):
@@ -31,13 +14,13 @@ def fix_distribution(x, y):
     return x, y
 
 
-def get_inverse(args, query, n_bins=100, log=False):
+def get_inverse(query, n_bins=100, log=False):
     kernel = stats.gaussian_kde(query.period.values)
     lower, upper = min(query.period.values), max(query.period.values)
-    if args.log:
-        x = np.logspace(np.log10(lower),np.log10(upper),args.n_bins)
+    if log:
+        x = np.logspace(np.log10(lower),np.log10(upper),n_bins)
     else:
-        x = np.linspace(lower,upper,args.n_bins)
+        x = np.linspace(lower,upper,n_bins)
     y = np.cumsum(kernel(x))/np.sum(kernel(x))
     x, y = fix_distribution(x, y)
     try:
@@ -45,11 +28,11 @@ def get_inverse(args, query, n_bins=100, log=False):
     except ValueError:
         return None, None
     else:
-        xnew = np.linspace(min(y),max(y),args.n_bins)
+        xnew = np.linspace(min(y),max(y),n_bins)
         return xnew, spline
 
 
-def get_periods(args, path_to_sample='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
+def get_periods(path_to_sample='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
     # read in known rotation periods to draw samples from
     df = pd.read_csv(args.path_to_sample)
     if args.path_to_stars is not None:
@@ -82,7 +65,8 @@ def get_periods(args, path_to_sample='rotation.csv', min_sample=20, res_teff=100
 
 
 # Main function to import when not using CLI
-def get_period(teff, logg, period=[], path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
+def get_period(teff, logg, path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
+    period=[]
     # read in known rotation periods and get limits
     df = pd.read_csv(path)
     for tt, ll in zip(teff, logg):
