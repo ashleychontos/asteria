@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 from scipy import stats, interpolate
 
 
-fig_path = '/Users/ashleychontos/Desktop/'
-
 
 def multiline(xs, ys, c, ax=None, **kwargs):
     """
@@ -72,38 +70,6 @@ def get_inverse(query, n_bins=100, log=False):
         return xnew, spline
 
 
-def get_periods(path_to_sample='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1,):
-    period=[]
-    # read in known rotation periods to draw samples from
-    df = pd.read_csv(args.path_to_sample)
-    if args.path_to_stars is not None:
-        # read in targets of interest to estimate rotation periods for
-        stars = pd.read_csv(args.path_to_stars)
-        args.teff, args.logg = stars.teff.values, stars.logg.values
-    # iterate through stars to estimate rotation periods
-    for teff, logg in zip(args.teff, args.logg):
-        # select stars near target in HR diagram
-        query = df.query("teff >= %f and teff < %f and logg >= %f and logg < %f"%(teff-(args.res_teff/2.), teff+(args.res_teff/2.), logg-(args.res_logg/2.), logg+(args.res_logg/2.)))
-        if len(query) < args.min_sample:
-            if args.verbose:
-                print('WARNING: not enough in the sample to create an accurate distribution.\nTry changing the resolution of the grid to include more stars!')
-                print('Currently using teff +/- %.1f K and logg +/- %.2f dex'%(args.res_teff/2.,args.res_logg/2.))
-            per = np.nan
-        else:
-            _, spline = get_inverse(args, query)
-            # draw random number to map back to period distribution
-            per = spline(random.random())+0.
-        period.append(per)
-    if args.path_to_stars is not None:
-        # save new period estimates
-        stars['period'] = np.array(period)
-        stars.to_csv(args.path_to_stars, index=False)
-    else:
-        if args.returnn:
-            return np.array(period)
-        else:
-            print(period)
-
 
 # Main function to import when not using CLI
 def get_period(teff, logg, path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=False):
@@ -150,7 +116,7 @@ def save_file(x, y, path, formats=[">10.4f", ">10.2f"]):
 
 
 def ensemble_plot_teff(path='rotation.csv', path_save='distributions', min_sample=20, 
-                       res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=True):
+                       res_teff=100., res_logg=0.1, log=False, save=False, show=True, verbose=True):
     import os
     from matplotlib import cm
     if not os.path.exists(os.path.join(os.path.abspath(os.getcwd()), path_save)):
@@ -224,7 +190,7 @@ def ensemble_plot_teff(path='rotation.csv', path_save='distributions', min_sampl
 
 
 def ensemble_plot_logg(path='rotation.csv', path_save='distributions', min_sample=20, 
-                       res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=False):
+                       res_teff=100., res_logg=0.1, log=False, save=False, show=True, verbose=False):
     import os
     from matplotlib import cm
     if not os.path.exists(os.path.join(os.path.abspath(os.getcwd()), path_save)):
@@ -297,7 +263,7 @@ def ensemble_plot_logg(path='rotation.csv', path_save='distributions', min_sampl
 
 
 def ensemble_plot_double(path='../../Info/rotation.csv', path_save='distributions', min_sample=20, 
-                         res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=False):
+                         res_teff=100., res_logg=0.1, log=False, save=False, show=True, verbose=False):
     import os
     from matplotlib import cm
     if not os.path.exists(os.path.join(os.path.abspath(os.getcwd()), path_save)):
