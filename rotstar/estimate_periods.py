@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats, interpolate
 
-path = '/Users/ashleychontos/Desktop/'
+fig_path = '/Users/ashleychontos/Desktop/'
 
 def main(args):
     check_inputs(args)
@@ -52,7 +52,7 @@ def get_inverse(args, query, n_bins=100, log=False):
         return xnew, spline
 
 
-def get_periods(args, path_to_sample='../../Info/rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
+def get_periods(args, path_to_sample='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, period=[]):
     if os.path.exists(path_to_sample):
         # read in known rotation periods to draw samples from
         df = pd.read_csv(args.path_to_sample)
@@ -88,7 +88,7 @@ def get_periods(args, path_to_sample='../../Info/rotation.csv', min_sample=20, r
 
 
 # Main function to import when not using CLI
-def get_period(teff, logg, period=[], path='/rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
+def get_period(teff, logg, period=[], path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
     # read in known rotation periods and get limits
     df = pd.read_csv(path)
     for tt, ll in zip(teff, logg):
@@ -152,7 +152,7 @@ def save_file(x, y, path, formats=[">10.4f", ">10.2f"]):
             f.write(text.format(*fmt))
 
 
-def ensemble_plot_teff(path='../../Info/rotation.csv', path_save='distributions', min_sample=20, 
+def ensemble_plot_teff(path='rotation.csv', path_save='distributions', min_sample=20, 
                        res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=False):
     import os
     from matplotlib import cm
@@ -217,16 +217,16 @@ def ensemble_plot_teff(path='../../Info/rotation.csv', path_save='distributions'
     plt.tight_layout()
     if save:
         if log:
-            plt.savefig('%steff_cb_logscale.png'%path, dpi=250)
+            plt.savefig('%steff_cb_logscale.png'%fig_path, dpi=250)
         else:
-            plt.savefig('%steff_cb.png'%path, dpi=250)
+            plt.savefig('%steff_cb.png'%fig_path, dpi=250)
     if show:
         plt.show()
     plt.close()
 
 
 
-def ensemble_plot_logg(path='../../Info/rotation.csv', path_save='distributions', min_sample=20, 
+def ensemble_plot_logg(path='rotation.csv', path_save='distributions', min_sample=20, 
                        res_teff=100., res_logg=0.1, log=False, save=True, show=True, verbose=False):
     import os
     from matplotlib import cm
@@ -291,9 +291,9 @@ def ensemble_plot_logg(path='../../Info/rotation.csv', path_save='distributions'
     plt.tight_layout()
     if save:
         if log:
-            plt.savefig('%slogg_cb_logscale.png'%path, dpi=250)
+            plt.savefig('%slogg_cb_logscale.png'%fig_path, dpi=250)
         else:
-            plt.savefig('%slogg_cb.png'%path, dpi=250)
+            plt.savefig('%slogg_cb.png'%fig_path, dpi=250)
     if show:
         plt.show()
     plt.close()
@@ -393,9 +393,9 @@ def ensemble_plot_double(path='../../Info/rotation.csv', path_save='distribution
     plt.tight_layout()
     if save:
         if log:
-            plt.savefig('%sdouble_panel_logscale.png'%path, dpi=250)
+            plt.savefig('%sdouble_panel_logscale.png'%fig_path, dpi=250)
         else:
-            plt.savefig('%sdouble_panel.png'%path, dpi=250)
+            plt.savefig('%sdouble_panel.png'%fig_path, dpi=250)
     if show:
         plt.show()
     plt.close()
