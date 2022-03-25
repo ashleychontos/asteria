@@ -86,7 +86,6 @@ def get_periods(args, path_to_sample='rotation.csv', min_sample=20, res_teff=100
         else:
             print(period)
 
-
 # Main function to import when not using CLI
 def get_period(teff, logg, path='rotation.csv', min_sample=20, res_teff=100., res_logg=0.1, log=False, n_bins=100, verbose=True):
     period=[]
