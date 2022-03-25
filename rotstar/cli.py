@@ -1,8 +1,11 @@
+import os
 import argparse
 
-import rotstar
-from rotstar import utils
-from rotstar import DATADIR
+#import rotstar
+#from rotstar import utils
+#from rotstar import DATADIR
+
+DATADIR=os.path.abspath(os.getcwd)
 
 
 def main():
@@ -15,11 +18,11 @@ def main():
                                      description="rotation: a quick package for estimating stellar rotation periods given their teff and logg", 
                                      prog='rotstar',
     )
-    parser.add_argument('-version', '--version',
-                        action='version',
-                        version="%(prog)s {}".format(rotstar.__version__),
-                        help="Print version number and exit.",
-    )
+#    parser.add_argument('-version', '--version',
+#                        action='version',
+#                        version="%(prog)s {}".format(rotstar.__version__),
+#                        help="Print version number and exit.",
+#    )
 
 #####################################################################
 # Parent parser contains arguments and options common to all modes
