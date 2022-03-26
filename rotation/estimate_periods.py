@@ -8,7 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats, interpolate
 
-fig_path = '/Users/ashleychontos/Desktop/'
+
 
 def main(args):
     check_inputs(args)
@@ -437,11 +437,6 @@ def multiline(xs, ys, c, ax=None, **kwargs):
     ax.add_collection(lc)
     ax.autoscale()
     return lc
-
-ensemble_plot_teff()
-ensemble_plot_logg()
-ensemble_plot_double()
-
 
 
 ##########################################################################################
