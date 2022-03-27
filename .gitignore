@@ -1,8 +1,10 @@
 # Byte-compiled / optimized / DLL files
+rotation/distributions
 __pycache__
 .DS_store
 *.py[cod]
 *$py.class
+distributions
 
 # C extensions
 *.so
