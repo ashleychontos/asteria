@@ -32,9 +32,19 @@ def get_inverse(query, n_bins=100,):
         return xnew, spline
 
 
-def get_periods(teff, logg, path_to_known='data/kepler.csv', min_sample=20, res_teff=100., 
-                res_logg=0.1, n_bins=100, verbose=False,):
+def get_periods(path_to_sample='data/sara_revised.csv', path_to_known='data/kepler.csv', 
+                teff=None, logg=None,  min_sample=20, res_teff=100., res_logg=0.1, 
+                n_bins=100, verbose=False,):
     period=[]
+    if teff is not None and logg is not None:
+        assert len(teff) == len(logg), "# ERROR: input arrays must be the same length"
+    else:
+        if os.path.exists(path_to_sample):
+            df = pd.read_csv(path_to_sample)
+            teff, logg = np.copy(df.teff.values), np.copy(df.logg.values)
+        else:
+            print('# ERROR: incorrect path -- cannot find sample\n#      Please try again.')
+            return
     # read in known rotation periods and get limits
     df = pd.read_csv(path_to_known)
     for tt, ll in zip(teff, logg):

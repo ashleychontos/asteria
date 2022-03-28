@@ -22,14 +22,17 @@ def make_all(
     major=15.,
     minor=10.,
     direction='inout',
-    # ensemble plot
+    # point to correct paths
     path_to_dists='data/distributions/dteff_100_K_dlogg_0.1_dex/*',
+    path_to_known='data/kepler.csv',
+    path_to_sample='data/sara_revised.csv', 
+    path_to_save='plots/',
+    # ensemble plot
     double=True,
     which='teff',
     res_teff=100.,
     res_logg=0.1,
     # hr diagram
-    path_to_sample='data/sara_revised.csv', 
     continuous=True,
     discrete=True,
     lower_x=6650.,
@@ -38,9 +41,9 @@ def make_all(
     upper_y=3.62,
     ):
 
-    ensemble_plot(path_to_dists=path_to_dists, double=double, which=which,)
-    rotation_hists(path_to_sample=path_to_sample,)
-    rotation_hrdiagram(path_to_sample=path_to_sample,)
+    ensemble_plot(path_to_save=path_to_save, path_to_known=path_to_known, path_to_dists=path_to_dists, double=double, which=which,)
+    rotation_hists(path_to_save=path_to_save, path_to_known=path_to_known, path_to_sample=path_to_sample,)
+    rotation_hrdiagram(path_to_save=path_to_save, path_to_sample=path_to_sample,)
     
     
 
@@ -77,8 +80,8 @@ def multiline(xs, ys, c, ax=None, **kwargs,):
     return lc
 
 
-def ensemble_plot(double=True, which='teff', path_to_dists=None, save=True, show=True, label_size=28., 
-                  tick_size=22., LW=1.25, major=15., minor=10., direction='inout',):
+def ensemble_plot(double=True, which='teff', path_to_save='../plots/', path_to_dists=None, save=True, show=True, label_size=28., 
+                  tick_size=22., LW=1.25, major=15., minor=10., direction='inout', path_to_known='data/kepler.csv'):
     d = {'teff':{'axis_label':r'$\rm T_{eff} \,\, [K]$', 'file_name':'ensemble_teff.png',
                  'tick_label':[r'$3500$', r'$4000$', r'$4500$', r'$5000$', r'$5500$', r'$6000$'],}, 
          'logg':{'axis_label':r'$\mathrm{log}\,g \,\, [\mathrm{dex}]$', 'file_name':'ensemble_logg.png',
@@ -153,14 +156,15 @@ def ensemble_plot(double=True, which='teff', path_to_dists=None, save=True, show
 
     plt.tight_layout()
     if save:
-        plt.savefig('plots/%s'%f_name, dpi=250)
+        plt.savefig('%s%s'%(path_to_save, f_name), dpi=250)
     if show:
         plt.show()
     plt.close()
 
 
-def rotation_hists(path_to_sample='data/sara_revised.csv', log=True, save=True, show=True, label_size=28., 
-                   tick_size=22., LW=1.25, major=15., minor=10., direction='inout', n_bins=40,):
+def rotation_hists(path_to_save='plots/', path_to_sample='data/sara_revised.csv', log=True, 
+                   save=True, show=True, label_size=28., tick_size=22., LW=1.25, major=15., 
+                   minor=10., direction='inout', n_bins=40, path_to_known='data/kepler.csv',):
     df = pd.read_csv(path_to_sample)
     # divide by spectral type
     # Early F stars
@@ -204,15 +208,16 @@ def rotation_hists(path_to_sample='data/sara_revised.csv', log=True, save=True, 
 
     plt.tight_layout()
     if save:
-        plt.savefig('plots/sptype_rotation.png', dpi=250)
+        plt.savefig('%ssptype_rotation.png'%path_to_save, dpi=250)
     if show:
         plt.show()
     plt.close()
 
 
-def rotation_hrdiagram(path_to_sample='data/sara_revised.csv', save=True, show=True, label_size=28., 
-                       tick_size=22., LW=1.25, major=15., minor=10., direction='inout', lower_x=6650.,
-                       upper_x=3650., lower_y=5.15, upper_y=3.62, continuous=True, discrete=True,):
+def rotation_hrdiagram(path_to_save='plots/', path_to_sample='data/sara_revised.csv', save=True, show=True, 
+                       label_size=28., tick_size=22., LW=1.25, major=15., minor=10., direction='inout', 
+                       lower_x=6650., upper_x=3650., lower_y=5.15, upper_y=3.62, continuous=True, 
+                       discrete=True, path_to_known='data/kepler.csv',):
 
     df = pd.read_csv(path_to_sample)
     s = np.argsort(df.period.values)
@@ -243,7 +248,7 @@ def rotation_hrdiagram(path_to_sample='data/sara_revised.csv', save=True, show=T
 
         plt.tight_layout()
         if save:
-            plt.savefig('plots/hrdiagram_rotation_1', dpi=250)
+            plt.savefig('%shrdiagram_rotation_1'%path_to_save, dpi=250)
         if show:
             plt.show()
         plt.close()
@@ -277,8 +282,61 @@ def rotation_hrdiagram(path_to_sample='data/sara_revised.csv', save=True, show=T
 
         plt.tight_layout()
         if save:
-            plt.savefig('plots/hrdiagram_rotation_2.png', dpi=250)
+            plt.savefig('%shrdiagram_rotation_2.png'%path_to_save, dpi=250)
         if show:
             plt.show()
         plt.close()
 
+
+def make_pdf_plots(path_to_dists='data/distributions/dteff_100_K_dlogg_0.1_dex/', show=False, 
+                   save=True, size=10**6, log=True, n_bins=60, label_size=28., tick_size=22., 
+                   minor=10, major=15, LW=1.25, direction='inout',):
+    import random
+    from scipy import interpolate
+    for file in glob.glob('%sfiles/*'%path_to_dists):
+        # open file and get CDF
+        with open(file, "r") as f:
+            lines = [line for line in f.readlines() if not line.startswith("#")]
+        x = np.array([float(line.strip().split()[0]) for line in lines])
+        y = np.array([float(line.strip().split()[1]) for line in lines])
+        # interpolate
+        spline = interpolate.CubicSpline(x, y)
+        # let's generate 10^6 random numbers and plot the distribution
+        size=10**6
+        values = np.array([np.nan]*size)
+        for i in range(size):
+            values[i] = random.random()
+        periods = spline(values)
+        # make figure
+        plt.figure(figsize=(10,7))
+        ax = plt.subplot(1,1,1)
+        if log:
+            bins=np.logspace(-1,np.log10(70.),n_bins)
+            xticks=[0.1, 0.3, 1., 3., 10., 30.]
+            labels=[r'$0.1$', r'$0.3$', r'$1$', r'$3$', r'$10$', r'$30$']
+        else:
+            bins=np.linspace(0.1,70.,n_bins)
+            xticks=[10, 20, 30, 40, 50, 60]
+            labels=[r'$10$', r'$20$', r'$30$', r'$40$', r'$50$', r'$60$']
+        ax.hist(periods, bins=bins, facecolor='0.75', zorder=4, edgecolor='k')
+        ax.set_xlabel(r'$\rm P_{rot} \,\, [days]$', fontsize=label_size)
+        if log:
+            ax.set_xscale('log')
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(labels)
+        ax.set_yticks([])
+        ax.set_yticklabels([])
+        ax.tick_params(axis='both', which='minor', length=minor, width=LW, direction=direction)
+        ax.tick_params(axis='both', which='major', length=major, width=LW, direction=direction)
+        ax.tick_params(labelsize=tick_size)
+
+        plt.tight_layout()
+        if save:
+            if log:
+                plt.savefig('%splots/%s_log.png'%(path_to_dists, '.'.join(file.split('/')[-1].split('.')[:-1])))
+            else:
+                plt.savefig('%splots/%s.png'%(path_to_dists, '.'.join(file.split('/')[-1].split('.')[:-1])))
+        if show:
+            # 10/10 do not recommend! n=252 for current settings
+            plt.show()
+        plt.close()
