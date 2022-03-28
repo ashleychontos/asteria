@@ -1,11 +1,11 @@
 #
 Byte-compiled / optimized / DLL files
-#plots
+plots
 __pycache__
 .DS_store
 *.py[cod]
 *$py.class
-#distributions
+distributions
 
 # C extensions
 *.so
