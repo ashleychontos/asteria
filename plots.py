@@ -23,7 +23,7 @@ def make_all(
     minor=10.,
     direction='inout',
     # point to correct paths
-    path_to_dists='data/distributions/dteff_100_K_dlogg_0.1_dex/*',
+    path_to_dists='data/distributions/dteff_100_K_dlogg_0.1_dex/',
     path_to_known='data/kepler.csv',
     path_to_sample='data/sara_revised.csv', 
     path_to_save='plots/',
@@ -49,8 +49,8 @@ def make_all(
 
 def get_dists(path_to_dists):
     xs, ys, t, l = [], [], [], []
-    if glob.glob(path_to_dists):
-        for file in glob.glob(path_to_dists):
+    if glob.glob('%sfiles/*'%path_to_dists):
+        for file in glob.glob('%sfiles/*'%path_to_dists):
             values = '.'.join(file.split('/')[-1].split('.')[:-1]).split('_')
             t.append((float(values[1]) + float(values[2]))/2.)
             l.append((float(values[4]) + float(values[5]))/2.)
@@ -88,7 +88,7 @@ def ensemble_plot(double=True, which='teff', path_to_save='../plots/', path_to_d
                  'tick_label':[r'$3.8$', r'$4.0$', r'$4.2$', r'$4.4$', r'$4.6$', r'$4.8$', r'$5.0$'],},
         }
     if path_to_dists is None:
-        path_to_dists = 'data/distributions/dteff_%d_K_dlogg_%f_dex/*'%(int(res_teff),res_logg)
+        path_to_dists = 'data/distributions/dteff_%d_K_dlogg_%f_dex/'%(int(res_teff),res_logg)
     xs, ys, t, l = get_dists(path_to_dists)
     if double:
         fig = plt.figure(figsize=(10,12))

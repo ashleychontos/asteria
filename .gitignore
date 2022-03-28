@@ -6,6 +6,7 @@ __pycache__
 *.py[cod]
 *$py.class
 distributions
+data/sara_revised.csv
 
 # C extensions
 *.so
